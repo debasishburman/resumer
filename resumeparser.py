@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from nltk.tree import ParentedTree
 import multiprocessing as mp
 import pprint
+import json
 
 
 
@@ -219,7 +220,14 @@ class ResumeParser(object):
 
 def resume_result_wrapper(resume):
     parser = ResumeParser(resume)
-    return parser.get_extracted_data()
+    extracted_data = parser.get_extracted_data()
+
+    # Save extracted data to a JSON file
+    json_filename = os.path.splitext(resume)[0] + '_extracted.json'
+    with open(json_filename, 'w') as json_file:
+        json.dump(extracted_data, json_file, indent=4)
+
+    return extracted_data
 
 if __name__ == '__main__':
     pool = mp.Pool(mp.cpu_count())
